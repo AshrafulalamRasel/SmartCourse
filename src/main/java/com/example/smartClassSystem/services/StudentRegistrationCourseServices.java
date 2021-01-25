@@ -9,11 +9,8 @@ import com.example.smartClassSystem.domain.repository.CourseRepository;
 import com.example.smartClassSystem.domain.repository.RegistrationCourseRepository;
 import com.example.smartClassSystem.domain.repository.StudentRepository;
 import com.example.smartClassSystem.domain.repository.TeacherRepository;
-import com.example.smartClassSystem.dto.request.CourseRequestList;
-import com.example.smartClassSystem.dto.request.RegistrationCourseRequest;
-import com.example.smartClassSystem.dto.request.StudentRequestList;
-import com.example.smartClassSystem.dto.request.TeacherRequestList;
 import com.example.smartClassSystem.dto.response.IdentityResponse;
+import com.example.smartClassSystem.dto.response.TeacherResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -58,59 +55,46 @@ public class StudentRegistrationCourseServices {
         return new IdentityResponse(uuid);
     }
 
-    public List<RegistrationCourseRequest> getAllStudentRegistrationCoursesByStudentId(String id) {
+    public List<Student> getAllStudentRegistrationCoursesByCourseId(String id) {
 
 
-        String studentId = null;
-        List<String> courseId = new ArrayList<>();
+        List<Student> studentList = new ArrayList<>();
 
-        List<RegistrationCourseRequest> registrationCourseRequestList = new ArrayList<>();
-
-        List<RegistrationCourse> registrationCourseOptional = registrationCourseRepository.findAllByStudentId(id);
-
+        List<RegistrationCourse> registrationCourseOptional = registrationCourseRepository.findAllByCourseId(id);
 
         for (RegistrationCourse registrationCourse : registrationCourseOptional) {
-
-
-            studentId = registrationCourse.getStudent().getStudentId();
-            courseId.add(registrationCourse.getCourse().getId());
-
+            studentList.add(registrationCourse.getStudent());
         }
 
-
-        List<StudentRequestList> studentRequestLists = new ArrayList<>();
-
-        List<Student> studentOptional = studentRepository.findAllByStudentId(studentId);
-        for (Student student : studentOptional) {
-            studentRequestLists.add(new StudentRequestList(student.getStudentId(), student.getStudentName(), student.getDepartment(), student.getCurrentSemester()));
-        }
-
-        List<TeacherRequestList> teacherRequestLists = new ArrayList<>();
-        List<CourseRequestList> courseRequestListList = new ArrayList<>();
-
-        for (String mm : courseId) {
-
-              Optional<Course> courseOptional = courseRepository.findAllById(mm);
-
-                TeacherRequestList teacherRequestList = new TeacherRequestList();
-
-                teacherRequestList.setTeacherId(courseOptional.get().getTeacher().getTeacherId());
-                teacherRequestList.setFirstName(courseOptional.get().getTeacher().getFirstName());
-                teacherRequestList.setDepartment(courseOptional.get().getTeacher().getDepartment());
-                teacherRequestList.setTeacherDesignation(courseOptional.get().getTeacher().getTeacherDesignation());
-
-                teacherRequestLists.add(teacherRequestList);
-
-
-            courseRequestListList.add(new CourseRequestList(courseOptional.get().getCourseCode(), courseOptional.get().getCourseName(), courseOptional.get().getCourseCredit(), teacherRequestLists));
-            new TeacherRequestList();
-        }
-
-        registrationCourseRequestList.add(new RegistrationCourseRequest(studentRequestLists, courseRequestListList));
-
-        return registrationCourseRequestList;
+        return studentList;
 
     }
 
 
+    public List<TeacherResponse> getAllStudentRegistrationCoursesByStudentId(String id) {
+
+        List<TeacherResponse> teacherResponseArrayList = new ArrayList<>();
+        List<RegistrationCourse> registrationCourseOptional = registrationCourseRepository.findAllByStudentId(id);
+
+        for (RegistrationCourse registrationCourse : registrationCourseOptional) {
+
+            Course course = registrationCourse.getCourse();
+            Teacher teacher = registrationCourse.getTeacher();
+
+            TeacherResponse teacherResponse = new TeacherResponse();
+            teacherResponse.setTeacherId(teacher.getTeacherId());
+            teacherResponse.setFirstName(teacher.getDepartment());
+            teacherResponse.setMobileNo(teacher.getMobileNo());
+            teacherResponse.setDepartment(teacher.getDepartment());
+            teacherResponse.setTeacherDesignation(teacher.getTeacherDesignation());
+            teacherResponse.setTeacherExpertise(teacher.getTeacherExpertise());
+            teacherResponse.setId(course.getId());
+            teacherResponse.setCourseCode(course.getCourseCode());
+            teacherResponse.setCourseName(course.getCourseName());
+            teacherResponse.setCourseDescription(course.getCourseDescription());
+            teacherResponse.setCourseCredit(course.getCourseCredit());
+            teacherResponseArrayList.add(teacherResponse);
+        }
+        return teacherResponseArrayList;
+    }
 }

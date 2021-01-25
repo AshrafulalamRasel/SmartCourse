@@ -15,7 +15,9 @@ import java.util.List;
 @NoArgsConstructor
 public class RegistrationCourseRequest {
 
- private List<StudentRequestList> studentRequestLists;
- private List<CourseRequestList> courseRequestLists;
+ private String studentId;
+ private String studentName;
+ private String department;
+ private String currentSemester;
 
 }

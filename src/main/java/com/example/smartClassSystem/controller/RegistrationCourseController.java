@@ -1,5 +1,6 @@
 package com.example.smartClassSystem.controller;
 
+import com.example.smartClassSystem.domain.model.Student;
 import com.example.smartClassSystem.dto.request.RegistrationCourseRequest;
 import com.example.smartClassSystem.dto.request.StudentRequest;
 import com.example.smartClassSystem.dto.response.IdentityResponse;
@@ -28,10 +29,14 @@ public class RegistrationCourseController {
         return new ResponseEntity(studentRegistrationCourseServices.registrationOnCourseByTeacherAndCourseId(studentId,teacherId,courseId), HttpStatus.CREATED);
     }
 
-    @GetMapping("/getAll/registration/course/by/student/{id}")
-    public ResponseEntity<List<RegistrationCourseRequest>> getAllRegistrationCourse(@PathVariable String id) {
+    @GetMapping("/getAll/registration/course/{id}")
+    public ResponseEntity<List<Student>> getAllRegistrationCourse(@PathVariable String id) {
+
+        return new ResponseEntity(studentRegistrationCourseServices.getAllStudentRegistrationCoursesByCourseId(id), HttpStatus.OK);
+    }
+    @GetMapping("/getAll/registration/students/{id}")
+    public ResponseEntity<List<Student>> getAllRegistrationCourseByStudentId(@PathVariable String id) {
 
         return new ResponseEntity(studentRegistrationCourseServices.getAllStudentRegistrationCoursesByStudentId(id), HttpStatus.OK);
     }
-
 }

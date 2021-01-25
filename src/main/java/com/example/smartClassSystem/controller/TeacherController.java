@@ -8,11 +8,10 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import java.util.List;
+
 
 @Slf4j
 @RestController
@@ -31,7 +30,7 @@ public class TeacherController {
 
 
     @GetMapping("/getAll/teacher/course/{id}")
-    public ResponseEntity<TeacherResponse> getCourseByTeachers(@PathVariable String id) {
+    public ResponseEntity<List<TeacherResponse>> getCourseByTeachers(@PathVariable String id) {
 
         return new ResponseEntity(teacherService.getAllTeacherInformation(id), HttpStatus.CREATED);
     }

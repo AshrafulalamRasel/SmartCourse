@@ -11,20 +11,16 @@ import com.example.smartClassSystem.dto.request.LoginRequest;
 import com.example.smartClassSystem.dto.request.TeacherRequest;
 import com.example.smartClassSystem.dto.response.IdentityResponse;
 import com.example.smartClassSystem.dto.response.LoginResponse;
-import com.example.smartClassSystem.dto.response.StudentResponse;
 import com.example.smartClassSystem.dto.response.TeacherResponse;
 import lombok.AllArgsConstructor;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.CascadeType;
-import javax.persistence.FetchType;
-import javax.persistence.OneToMany;
-import javax.persistence.PreRemove;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @AllArgsConstructor
 @Service
@@ -36,7 +32,7 @@ public class TeacherService {
 
     public IdentityResponse createTeacher(TeacherRequest teacherRequest) {
 
-        String uuid =UUID.randomUUID().toString();
+        String uuid = UUID.randomUUID().toString();
 
         Teacher teacher = new Teacher();
 
@@ -56,11 +52,11 @@ public class TeacherService {
 
     }
 
-    public LoginResponse signIn(LoginRequest loginRequest){
+    public LoginResponse signIn(LoginRequest loginRequest) {
         LoginResponse loginResponse = new LoginResponse();
-        Optional<Teacher>  teacherOptional = teacherRepository.findAllByTeacherIdAndPassword(loginRequest.getId(),loginRequest.getPassword());
+        Optional<Teacher> teacherOptional = teacherRepository.findAllByTeacherIdAndPassword(loginRequest.getId(), loginRequest.getPassword());
 
-        if (teacherOptional.isPresent()){
+        if (teacherOptional.isPresent()) {
 
             Teacher teacher = teacherOptional.get();
             loginResponse.setId(teacher.getId());
@@ -68,15 +64,14 @@ public class TeacherService {
             loginResponse.setMobileNo(teacher.getMobileNo());
             loginResponse.setRole("faculty");
             return loginResponse;
-        }
-        else if (!teacherOptional.isPresent()){
+        } else if (!teacherOptional.isPresent()) {
 
-            Optional<Student>  studentOptional = studentRepository.findAllByStudentIdAndPassword(loginRequest.getId(),loginRequest.getPassword());
+            Optional<Student> studentOptional = studentRepository.findAllByStudentIdAndPassword(loginRequest.getId(), loginRequest.getPassword());
             Student student = studentOptional.get();
             loginResponse.setId(student.getId());
             loginResponse.setName(student.getStudentName());
             loginResponse.setMobileNo(student.getMobileNo());
-            loginResponse.setRole("faculty");
+            loginResponse.setRole("student");
             return loginResponse;
         }
 
@@ -84,54 +79,43 @@ public class TeacherService {
     }
 
 
+    public  List<TeacherResponse> getAllTeacherInformation(String teacherId) {
+
+        Optional<Teacher> teacherOptional = teacherRepository.findAllById(teacherId);
+        List<Course> courseOptional = courseRepository.findAllByTeacherId(teacherId);
 
 
+        List<TeacherResponse> teacherResponseArrayList = new ArrayList<>();
 
-    public TeacherResponse getAllTeacherInformation(String teacherId){
+        for (Course courseRequest : courseOptional) {
 
-        Optional<Teacher> teacherOptional =teacherRepository.findAllById(teacherId);
-        List<Course> courseOptional =courseRepository.findAllByTeacherId(teacherId);
+            TeacherResponse teacherResponse = new TeacherResponse();
+            teacherResponse.setTeacherId(teacherOptional.get().getTeacherId());
+            teacherResponse.setFirstName(teacherOptional.get().getDepartment());
+            teacherResponse.setMobileNo(teacherOptional.get().getMobileNo());
+            teacherResponse.setDepartment(teacherOptional.get().getDepartment());
+            teacherResponse.setTeacherDesignation(teacherOptional.get().getTeacherDesignation());
+            teacherResponse.setTeacherExpertise(teacherOptional.get().getTeacherExpertise());
+            teacherResponse.setId(courseRequest.getId());
+            teacherResponse.setCourseCode(courseRequest.getCourseCode());
+            teacherResponse.setCourseName(courseRequest.getCourseName());
+            teacherResponse.setCourseDescription(courseRequest.getCourseDescription());
+            teacherResponse.setCourseCredit(courseRequest.getCourseCredit());
+            teacherResponseArrayList.add(teacherResponse);
 
-
-        TeacherResponse teacherResponse = new TeacherResponse();
-
-        teacherResponse.setTeacherId(teacherOptional.get().getTeacherId());
-        teacherResponse.setFirstName(teacherOptional.get().getDepartment());
-        teacherResponse.setMobileNo(teacherOptional.get().getMobileNo());
-        teacherResponse.setDepartment(teacherOptional.get().getDepartment());
-        teacherResponse.setTeacherDesignation(teacherOptional.get().getTeacherDesignation());
-        teacherResponse.setTeacherExpertise(teacherOptional.get().getTeacherExpertise());
-
-
-        List<CourseRequest> courseList = new ArrayList<>();
-
-        for (Course courseRequest :courseOptional){
-
-            CourseRequest courseRequest1 = new CourseRequest();
-
-            courseRequest1.setId(courseRequest.getId());
-            courseRequest1.setCourseCode(courseRequest.getCourseCode());
-            courseRequest1.setCourseName(courseRequest.getCourseName());
-            courseRequest1.setCourseDescription(courseRequest.getCourseDescription());
-            courseRequest1.setCourseCredit(courseRequest.getCourseCredit());
-
-            courseList.add(courseRequest1);
         }
 
 
 
-        teacherResponse.setCourseAvailable(courseList);
 
 
-
-
-        return teacherResponse;
+        return teacherResponseArrayList;
     }
 
 
-    public ResponseEntity<String> updateTeacherProfile(String id,TeacherRequest teacherRequest){
+    public ResponseEntity<String> updateTeacherProfile(String id, TeacherRequest teacherRequest) {
 
-        Optional<Teacher>  teacherOptional = teacherRepository.findAllById(id);
+        Optional<Teacher> teacherOptional = teacherRepository.findAllById(id);
 
         Teacher teacher = teacherOptional.get();
 
@@ -146,9 +130,9 @@ public class TeacherService {
     }
 
 
-    public ResponseEntity<String> deleteTeacherProfile(String id){
+    public ResponseEntity<String> deleteTeacherProfile(String id) {
 
-        Optional<Teacher>  teacherOptional = teacherRepository.findAllById(id);
+        Optional<Teacher> teacherOptional = teacherRepository.findAllById(id);
 
         if (!teacherOptional.isPresent()) {
             throw new RuntimeException("Teacher not found.");

@@ -2,12 +2,15 @@ package com.example.smartClassSystem.controller;
 
 import com.example.smartClassSystem.dto.request.CourseRequest;
 import com.example.smartClassSystem.dto.response.IdentityResponse;
+import com.example.smartClassSystem.dto.response.TeacherResponse;
 import com.example.smartClassSystem.services.CourseService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -25,5 +28,9 @@ public class CourseController {
     }
 
 
-    //TODO: GET ALL Courses
+    @GetMapping("/courses")
+    public ResponseEntity<List<TeacherResponse>> getAllCourse() {
+
+        return new ResponseEntity(courseService.getAllCourse(), HttpStatus.CREATED);
+    }
 }

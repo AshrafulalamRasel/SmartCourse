@@ -11,5 +11,6 @@ import java.util.Optional;
 public interface RegistrationCourseRepository extends JpaRepository<RegistrationCourse, String> {
 
     List<RegistrationCourse> findAllByStudentId(String id);
+    List<RegistrationCourse> findAllByCourseId(String id);
 
 }

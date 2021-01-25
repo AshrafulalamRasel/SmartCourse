@@ -7,9 +7,12 @@ import com.example.smartClassSystem.domain.repository.TeacherRepository;
 import com.example.smartClassSystem.dto.request.CourseRequest;
 import com.example.smartClassSystem.dto.request.TeacherRequest;
 import com.example.smartClassSystem.dto.response.IdentityResponse;
+import com.example.smartClassSystem.dto.response.TeacherResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -45,4 +48,31 @@ public class CourseService {
     }
 
 
+    public List<TeacherResponse> getAllCourse() {
+
+        List<Course> courseOptional = courseRepository.findAll();
+
+
+        List<TeacherResponse> teacherResponseArrayList = new ArrayList<>();
+
+        for (Course courseRequest : courseOptional) {
+
+            TeacherResponse teacherResponse = new TeacherResponse();
+            teacherResponse.setTeacherId(courseRequest.getTeacher().getId());
+            teacherResponse.setFirstName(courseRequest.getTeacher().getDepartment());
+            teacherResponse.setMobileNo(courseRequest.getTeacher().getMobileNo());
+            teacherResponse.setDepartment(courseRequest.getTeacher().getDepartment());
+            teacherResponse.setTeacherDesignation(courseRequest.getTeacher().getTeacherDesignation());
+            teacherResponse.setTeacherExpertise(courseRequest.getTeacher().getTeacherExpertise());
+            teacherResponse.setId(courseRequest.getId());
+            teacherResponse.setCourseCode(courseRequest.getCourseCode());
+            teacherResponse.setCourseName(courseRequest.getCourseName());
+            teacherResponse.setCourseDescription(courseRequest.getCourseDescription());
+            teacherResponse.setCourseCredit(courseRequest.getCourseCredit());
+            teacherResponseArrayList.add(teacherResponse);
+
+        }
+
+        return teacherResponseArrayList;
+    }
 }
