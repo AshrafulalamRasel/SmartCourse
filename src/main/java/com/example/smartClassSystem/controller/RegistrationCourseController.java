@@ -1,5 +1,6 @@
 package com.example.smartClassSystem.controller;
 
+import com.example.smartClassSystem.dto.request.RegistrationCourseRequest;
 import com.example.smartClassSystem.dto.request.StudentRequest;
 import com.example.smartClassSystem.dto.response.IdentityResponse;
 import com.example.smartClassSystem.services.StudentRegistrationCourseServices;
@@ -9,6 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -26,7 +29,7 @@ public class RegistrationCourseController {
     }
 
     @GetMapping("/getAll/registration/course/by/student/{id}")
-    public ResponseEntity<String> getAllRegistrationCourse(@PathVariable String id) {
+    public ResponseEntity<List<RegistrationCourseRequest>> getAllRegistrationCourse(@PathVariable String id) {
 
         return new ResponseEntity(studentRegistrationCourseServices.getAllStudentRegistrationCoursesByStudentId(id), HttpStatus.OK);
     }

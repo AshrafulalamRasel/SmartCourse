@@ -3,6 +3,7 @@ package com.example.smartClassSystem.controller;
 import com.example.smartClassSystem.dto.request.LoginRequest;
 import com.example.smartClassSystem.dto.request.TeacherRequest;
 import com.example.smartClassSystem.dto.response.IdentityResponse;
+import com.example.smartClassSystem.dto.response.LoginResponse;
 import com.example.smartClassSystem.services.TeacherService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +21,7 @@ public class CommonLoginController {
     private final TeacherService teacherService;
 
     @PostMapping("/common/login")
-    public ResponseEntity<IdentityResponse> SignIn(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<LoginResponse> SignIn(@RequestBody LoginRequest loginRequest) {
 
         return new ResponseEntity(teacherService.signIn(loginRequest), HttpStatus.CREATED);
     }
