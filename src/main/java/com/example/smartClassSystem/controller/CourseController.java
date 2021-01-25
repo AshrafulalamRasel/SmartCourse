@@ -23,4 +23,7 @@ public class CourseController {
 
         return new ResponseEntity(courseService.createCourseByTeacher(id,courseRequest), HttpStatus.CREATED);
     }
+
+
+    //TODO: GET ALL Courses
 }
