@@ -91,7 +91,7 @@ public class TeacherService {
 
             TeacherResponse teacherResponse = new TeacherResponse();
             teacherResponse.setTeacherId(teacherOptional.get().getTeacherId());
-            teacherResponse.setFirstName(teacherOptional.get().getDepartment());
+            teacherResponse.setFirstName(teacherOptional.get().getFirstName());
             teacherResponse.setMobileNo(teacherOptional.get().getMobileNo());
             teacherResponse.setDepartment(teacherOptional.get().getDepartment());
             teacherResponse.setTeacherDesignation(teacherOptional.get().getTeacherDesignation());
