@@ -10,6 +10,7 @@ import com.example.smartClassSystem.dto.request.CourseRequest;
 import com.example.smartClassSystem.dto.request.LoginRequest;
 import com.example.smartClassSystem.dto.request.TeacherRequest;
 import com.example.smartClassSystem.dto.response.IdentityResponse;
+import com.example.smartClassSystem.dto.response.LoginResponse;
 import com.example.smartClassSystem.dto.response.StudentResponse;
 import com.example.smartClassSystem.dto.response.TeacherResponse;
 import lombok.AllArgsConstructor;
@@ -55,22 +56,28 @@ public class TeacherService {
 
     }
 
-    public IdentityResponse signIn(LoginRequest loginRequest){
-
+    public LoginResponse signIn(LoginRequest loginRequest){
+        LoginResponse loginResponse = new LoginResponse();
         Optional<Teacher>  teacherOptional = teacherRepository.findAllByTeacherIdAndPassword(loginRequest.getId(),loginRequest.getPassword());
 
         if (teacherOptional.isPresent()){
 
             Teacher teacher = teacherOptional.get();
-
-            return new IdentityResponse(teacher.getId());
+            loginResponse.setId(teacher.getId());
+            loginResponse.setName(teacher.getFirstName());
+            loginResponse.setMobileNo(teacher.getMobileNo());
+            loginResponse.setRole("faculty");
+            return loginResponse;
         }
         else if (!teacherOptional.isPresent()){
 
             Optional<Student>  studentOptional = studentRepository.findAllByStudentIdAndPassword(loginRequest.getId(),loginRequest.getPassword());
             Student student = studentOptional.get();
-
-            return new IdentityResponse(student.getId());
+            loginResponse.setId(student.getId());
+            loginResponse.setName(student.getStudentName());
+            loginResponse.setMobileNo(student.getMobileNo());
+            loginResponse.setRole("faculty");
+            return loginResponse;
         }
 
         return null;
