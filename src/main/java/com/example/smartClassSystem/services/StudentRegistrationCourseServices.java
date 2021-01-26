@@ -83,7 +83,7 @@ public class StudentRegistrationCourseServices {
 
             TeacherResponse teacherResponse = new TeacherResponse();
             teacherResponse.setTeacherId(teacher.getTeacherId());
-            teacherResponse.setFirstName(teacher.getDepartment());
+            teacherResponse.setFirstName(teacher.getFirstName());
             teacherResponse.setMobileNo(teacher.getMobileNo());
             teacherResponse.setDepartment(teacher.getDepartment());
             teacherResponse.setTeacherDesignation(teacher.getTeacherDesignation());

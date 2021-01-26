@@ -59,7 +59,7 @@ public class CourseService {
 
             TeacherResponse teacherResponse = new TeacherResponse();
             teacherResponse.setTeacherId(courseRequest.getTeacher().getId());
-            teacherResponse.setFirstName(courseRequest.getTeacher().getDepartment());
+            teacherResponse.setFirstName(courseRequest.getTeacher().getFirstName());
             teacherResponse.setMobileNo(courseRequest.getTeacher().getMobileNo());
             teacherResponse.setDepartment(courseRequest.getTeacher().getDepartment());
             teacherResponse.setTeacherDesignation(courseRequest.getTeacher().getTeacherDesignation());
